@@ -103,7 +103,8 @@ function toggleFullScreen() {
         }
         requestWakeLock(); // Request wake lock when entering full screen
         updateWeather();
-        updateText();
+        var paragraph = document.getElementById('infoParagraph');
+        paragraph.style.display = 'none'; // Hide the paragraph
     } else {
         // Exiting full screen
         if (document.exitFullscreen) {
@@ -120,7 +121,39 @@ function toggleFullScreen() {
     }
 }
 
-document.addEventListener('click', toggleFullScreen);
+var longPressDuration = 1000; // Long press duration in milliseconds
+var pressStartTime;
+var timerId;
+
+function handlePressStart(event) {
+    if (event.type === 'mousedown' && event.button !== 0) {
+        // Ignore right-clicks
+        return;
+    }
+
+    event.preventDefault(); // Prevent default actions like context menu
+    pressStartTime = new Date().getTime();
+
+    // Set a timeout for the long press
+    timerId = setTimeout(function() {
+        if (new Date().getTime() - pressStartTime >= longPressDuration) {
+            toggleFullScreen();
+        }
+    }, longPressDuration);
+}
+
+function handlePressEnd(event) {
+    clearTimeout(timerId); // Clear the timeout if the press ends
+}
+
+// Attach event listeners
+document.addEventListener('mousedown', handlePressStart);
+document.addEventListener('mouseup', handlePressEnd);
+document.addEventListener('touchstart', handlePressStart);
+document.addEventListener('touchend', handlePressEnd);
+document.addEventListener('contextmenu', function(event) {
+    event.preventDefault(); // Prevent the context menu from appearing on long press
+});
 
 async function getNextRainOrSnow() {
     try {
@@ -209,13 +242,4 @@ function updateWeather() {
 function updateWeatherText(hours, startsRaining) {
     var weatherString = (startsRaining ? "🌧️" : "☀️") + " in " + hours + " hrs";
     document.getElementById('weather').textContent = weatherString;
-}
-
-function updateText() {
-    var paragraph = document.getElementById('infoParagraph');
-    if (paragraph.style.display === 'none') {
-        paragraph.style.display = 'block'; // Make the paragraph visible again
-    } else {
-        paragraph.style.display = 'none'; // Hide the paragraph
-    }
 }
