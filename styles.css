@@ -11,7 +11,8 @@ body {
 }
 
 #timer-container {
-    position: absolute; /* Allows us to move the container around */
+    transition: left 5s, top 5s;
+    position: absolute;
 }
 
 #timer,

@@ -7,6 +7,7 @@ Countdown Timer screensaver is a countdown timer till the end of the day providi
   - Helpfully provides the next time it will start or stop raining/snowing!*
 - Prevents the screen from closing and has a full screen mode.
 - Burn-in protection for oled screens.
+  - Smooth transitions when moving around.
 - An app that works on iOS, Android, Windows, macOS, and possibly anything POSIX through the browser's progressive web app feature!
 
 Do fork and try out the project. Leave a star if you use it! Check out the CONTRIBUTING.md for help.

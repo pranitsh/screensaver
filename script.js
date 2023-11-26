@@ -37,10 +37,9 @@ function moveElement(elementId) {
     const element = document.getElementById(elementId);
     
     // X coordinate can range from 0 to (window width - element width)
-    const x = Math.floor(Math.random() * (window.innerWidth / 2 - element.clientWidth));
+    const x = Math.floor(window.innerWidth/2 + Math.random() * (window.innerWidth / 2 - element.clientWidth));
 
     // Y coordinate ranges from 0 to (1/3 of window height - element height)
-    // Adjust the divisor (3 in this case) to change the vertical range
     const y = Math.floor(Math.random() * (window.innerHeight / 3 - element.clientHeight));
 
     element.style.left = `${x}px`;
