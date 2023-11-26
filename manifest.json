@@ -18,11 +18,6 @@
             "type": "image/png"
         },
         {
-            "src": "icons/icons8-clock-128.png",
-            "sizes": "128x128",
-            "type": "image/png"
-        },
-        {
             "src": "icons/icons8-clock-144.png",
             "sizes": "144x144",
             "type": "image/png"
@@ -38,8 +33,8 @@
             "type": "image/png"
         },
         {
-            "src": "icons/icons8-clock-384.png",
-            "sizes": "384x384",
+            "src": "icons/icons8-clock-310.png",
+            "sizes": "310x310",
             "type": "image/png"
         },
         {
