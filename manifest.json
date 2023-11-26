@@ -1,7 +1,7 @@
 {
     "name": "Countdown Timer Screensaver",
     "short_name": "Countdown",
-    "description": "This app is designed tested only with android as a web app screensaver. Open up the app and enjoy a convenient screensaver.",
+    "description": "This app is designed and tested only with android for the purposes of acting as a screensaver. Open up the app and enjoy a convenient screensaver.",
     "start_url": "index.html",
     "display": "standalone",
     "background_color": "#FFFFFF",

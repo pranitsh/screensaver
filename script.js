@@ -2,6 +2,7 @@ function updateDateTime() {
     const now = new Date();
     updateTimer(now);
     updateDate(now);
+    updateCharge();
 }
 
 function updateTimer(now) {
@@ -20,6 +21,15 @@ function updateDate(now) {
     const dateStr = `${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')}/${now.getFullYear().toString().substr(-2)}`;
     document.getElementById('date').textContent = dateStr;
 }
+
+function updateCharge() {
+    navigator.getBattery().then(function(battery) {
+        var batteryString = (battery.level * 100).toFixed(0) + "%" + (battery.charging ? "⬆️" : "⬇️");
+        document.getElementById('charge').textContent = batteryString;
+    });
+}
+
+
 
 function moveTimer() {
     moveElement('timer-container');
