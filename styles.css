@@ -4,18 +4,22 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
+    background-color: #000000; /* Changed to black */
+    color: #FFFFFF; /* Sets default text color to white */
     font-family: Arial, sans-serif;
     overflow: hidden; /* Prevents scrollbars when moving the timer */
 }
 
+#timer-container {
+    position: absolute; /* Allows us to move the container around */
+}
+
 #timer {
-    font-size: 3em;
-    color: #333;
-    position: absolute; /* Allows us to move it around */
+    font-size: 2em;
+    color: #FFFFFF;
 }
 
 #date {
-    margin-top: 100px; /* Spacing between date and timer */
     font-size: 2em;
+    color: #FFFFFF;
 }

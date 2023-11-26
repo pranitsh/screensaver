@@ -2,7 +2,6 @@ function updateDateTime() {
     const now = new Date();
     updateTimer(now);
     updateDate(now);
-    moveTimer();
 }
 
 function updateTimer(now) {
@@ -23,15 +22,24 @@ function updateDate(now) {
 }
 
 function moveTimer() {
-    const timer = document.getElementById('timer');
-    const x = Math.floor(Math.random() * (window.innerWidth - timer.clientWidth));
-    const y = Math.floor(Math.random() * (window.innerHeight - timer.clientHeight));
-    timer.style.left = `${x}px`;
-    timer.style.top = `${y}px`;
+    moveElement('timer-container');
 }
 
+function moveElement(elementId) {
+    const element = document.getElementById(elementId);
+    const x = Math.floor(Math.random() * (window.innerWidth - element.clientWidth));
+    const y = Math.floor(Math.random() * (window.innerHeight - element.clientHeight));
+    element.style.left = `${x}px`;
+    element.style.top = `${y}px`;
+}
+
+// Update the timer every second
 setInterval(updateDateTime, 1000);
 updateDateTime();
+
+// Move the timer and the date every 10 minutes (600000 milliseconds)
+setInterval(moveTimer, 60000);
+moveTimer();  // Call it once initially to position the elements
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
