@@ -117,6 +117,7 @@ function toggleFullScreen() {
             document.webkitExitFullscreen();
         }
         releaseWakeLock(); // Release wake lock when exiting full screen
+        updateText();
     }
 }
 
