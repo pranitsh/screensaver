@@ -104,6 +104,7 @@ function toggleFullScreen() {
         }
         requestWakeLock(); // Request wake lock when entering full screen
         updateWeather();
+        updateText();
     } else {
         // Exiting full screen
         if (document.exitFullscreen) {
@@ -208,4 +209,13 @@ function updateWeather() {
 function updateWeatherText(hours, startsRaining) {
     var weatherString = (startsRaining ? "🌧️" : "☀️") + " in " + hours + " hrs";
     document.getElementById('weather').textContent = weatherString;
+}
+
+function updateText() {
+    var paragraph = document.getElementById('infoParagraph');
+    if (paragraph.style.display === 'none') {
+        paragraph.style.display = 'block'; // Make the paragraph visible again
+    } else {
+        paragraph.style.display = 'none'; // Hide the paragraph
+    }
 }
