@@ -29,8 +29,6 @@ function updateCharge() {
     });
 }
 
-
-
 function moveTimer() {
     moveElement('timer-container');
 }
@@ -69,9 +67,32 @@ if ('serviceWorker' in navigator) {
     });
 }
 
+let wakeLock = null;
+
+async function requestWakeLock() {
+    if ('wakeLock' in navigator) {
+        try {
+            wakeLock = await navigator.wakeLock.request('screen');
+            console.log('Wake Lock is active');
+        } catch (err) {
+            console.error(`${err.name}, ${err.message}`);
+        }
+    }
+}
+
+async function releaseWakeLock() {
+    if (wakeLock !== null) {
+        await wakeLock.release();
+        wakeLock = null;
+        console.log('Wake Lock is released');
+    }
+}
+
 function toggleFullScreen() {
-    if (!document.fullscreenElement &&    // alternative standard method
-        !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
+    if (!document.fullscreenElement &&
+        !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+
+        // Entering full screen
         if (document.documentElement.requestFullscreen) {
             document.documentElement.requestFullscreen();
         } else if (document.documentElement.msRequestFullscreen) {
@@ -81,7 +102,10 @@ function toggleFullScreen() {
         } else if (document.documentElement.webkitRequestFullscreen) {
             document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
         }
+        requestWakeLock(); // Request wake lock when entering full screen
+        updateWeather();
     } else {
+        // Exiting full screen
         if (document.exitFullscreen) {
             document.exitFullscreen();
         } else if (document.msExitFullscreen) {
@@ -91,23 +115,97 @@ function toggleFullScreen() {
         } else if (document.webkitExitFullscreen) {
             document.webkitExitFullscreen();
         }
+        releaseWakeLock(); // Release wake lock when exiting full screen
     }
 }
 
 document.addEventListener('click', toggleFullScreen);
 
-async function requestWakeLock() {
-    if ('wakeLock' in navigator) {
-        try {
-            const wakeLock = await navigator.wakeLock.request('screen');
-            console.log('Wake Lock is active');
+async function getNextRainOrSnow() {
+    try {
+        const position = await getCurrentLocation();
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
 
-            // Handle visibility change or page unload to release the wake lock
-            // ...
-        } catch (err) {
-            console.error(`${err.name}, ${err.message}`);
+        const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=precipitation`;
+
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
+
+        const data = await response.json();
+        return analyzePrecipitationData(data.hourly);
+    } catch (error) {
+        console.error('Error:', error);
     }
 }
 
-requestWakeLock();
+function analyzePrecipitationData(hourlyData) {
+    let isRaining = hourlyData.precipitation[0] > 0;
+    let currentTime = new Date(hourlyData.time[0]);
+
+    for (let i = 1; i < hourlyData.precipitation.length; i++) {
+        const currentPrecipitation = hourlyData.precipitation[i];
+        const forecastTime = new Date(hourlyData.time[i]);
+
+        if ((isRaining && currentPrecipitation === 0) || (!isRaining && currentPrecipitation > 0)) {
+            const hoursUntilChange = Math.abs(forecastTime - currentTime) / 36e5; // Convert milliseconds to hours
+            return {
+                time: hourlyData.time[i],
+                startsRaining: !isRaining,
+                hours: hoursUntilChange
+            };
+        }
+
+        isRaining = currentPrecipitation > 0;
+    }
+
+    return null;
+}
+
+function getCurrentLocation() {
+    return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+            reject(new Error('Geolocation is not supported by your browser'));
+        } else {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+        }
+    });
+}
+
+let weatherInterval;
+
+function updateWeather() {
+    getNextRainOrSnow()
+    .then(result => {
+        if (result) {
+            var hoursUntilChange = Math.floor(result.hours);
+            updateWeatherText(hoursUntilChange, result.startsRaining);
+
+            // Clear any existing interval
+            if (weatherInterval) {
+                clearInterval(weatherInterval);
+            }
+
+            // Set up an interval to update the text every hour
+            weatherInterval = setInterval(() => {
+                hoursUntilChange--;
+                if (hoursUntilChange >= 0) {
+                    updateWeatherText(hoursUntilChange, result.startsRaining);
+                } else {
+                    clearInterval(weatherInterval);
+                    document.getElementById('weather').textContent = "?";
+                }
+            }, 3600000); // 3600000ms = 1 hour
+        } else {
+            document.getElementById('weather').textContent = "?";
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function updateWeatherText(hours, startsRaining) {
+    var weatherString = (startsRaining ? "🌧️" : "☀️") + " in " + hours + " hrs";
+    document.getElementById('weather').textContent = weatherString;
+}

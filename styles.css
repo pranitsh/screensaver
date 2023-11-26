@@ -16,7 +16,8 @@ body {
 
 #timer,
 #date,
-#charge {
-    font-size: 2em;
+#charge,
+#weather {
+    font-size: 1.5em;
     color: #FFFFFF;
 }
