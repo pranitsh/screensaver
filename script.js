@@ -24,7 +24,7 @@ function updateDate(now) {
 
 function updateCharge() {
     navigator.getBattery().then(function(battery) {
-        var batteryString = (battery.level * 100).toFixed(0) + "%" + (battery.charging ? "⬆️" : "⬇️");
+        var batteryString = (battery.level * 100).toFixed(0) + "% " + (battery.charging ? "↑" : "↓");
         document.getElementById('charge').textContent = batteryString;
     });
 }

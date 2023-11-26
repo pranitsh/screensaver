@@ -1,12 +1,12 @@
-# timer_screensaver
+# Countdown Timer Screensaver
 Countdown Timer screensaver is a countdown timer till the end of the day providing a black background and burn-in protection for android screens.
 
 ## Features
 - Countdown timer to the end of the day with date.
 - Burn-in protection for oled screens.
-- An app that works on iOS and Android through browser's progressive web app feature! 
+- An app that works on iOS, Android, Windows, macOS, and possibly anything POSIX through the browser's progressive web app feature!
 
-Do fork and try out the project. Leave a star if you use it!
+Do fork and try out the project. Leave a star if you use it! Check out the CONTRIBUTING.md for help.
 
 ## Why I made it?
 - Widgets cannot be updated every second on Android. It is only possible to update them every minute for battery life reasons.

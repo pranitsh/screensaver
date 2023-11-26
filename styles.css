@@ -14,12 +14,7 @@ body {
     position: absolute; /* Allows us to move the container around */
 }
 
-#timer {
-    font-size: 1em;
-    color: #FFFFFF;
-}
-
-#date {
-    font-size: 1em;
+#timer, #date, #charge {
+    font-size: 1vw; /* Adjust the value as needed */
     color: #FFFFFF;
 }
