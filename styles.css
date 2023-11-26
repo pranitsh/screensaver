@@ -15,6 +15,6 @@ body {
 }
 
 #timer, #date, #charge {
-    font-size: 1vw; /* Adjust the value as needed */
+    font-size: 1.5em; /* Adjust the value as needed */
     color: #FFFFFF;
 }
