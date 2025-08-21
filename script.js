@@ -50,8 +50,6 @@ function moveElement(elementId) {
 setInterval(updateDateTime, 1000);
 updateDateTime();
 
-// Move the timer and the date every 10 minutes (600000 milliseconds)
-setInterval(moveTimer, 60000);
 moveTimer();  // Call it once initially to position the elements
 
 if ('serviceWorker' in navigator) {
